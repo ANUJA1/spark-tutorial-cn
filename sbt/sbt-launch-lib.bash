@@ -5,18 +5,23 @@
 # Note: This should be used by tools like giter8/conscript etc.
 
 # TODO - Should we merge the main SBT script with this library?
-
+# 第一步：定义script_dir,这个脚本是配合其他脚本使用的，所以script_path也是外面定义的
+# test -z的意思为是判断字符串长度为0
 if test -z "$HOME"; then
   declare -r script_dir="$(dirname $script_path)"
 else
   declare -r script_dir="$HOME/.sbt"
 fi
 
+# 定义java、scala、sbt的参数对象
+# declare -a代表变量为数组
 declare -a residual_args
 declare -a java_args
 declare -a scalac_args
 declare -a sbt_commands
 
+# 设置java_cmd，方法为判断JAVA_HOME下的java如果存在则取这个路径为java_cmd,否则为java
+# test -x的意思是判断文件存在且可执行
 if test -x "$JAVA_HOME/bin/java"; then
     echo -e "Using $JAVA_HOME as default JAVA_HOME."
     echo "Note, this will be overridden by -java-home if it is set."
@@ -24,6 +29,7 @@ if test -x "$JAVA_HOME/bin/java"; then
 else
     declare java_cmd=java
 fi
+
 
 echoerr () {
   echo 1>&2 "$@"
@@ -153,6 +159,10 @@ process_args () {
   }
 }
 
+# run函数分为3步
+# 第一步：下载sbt，详见acquire_sbt_jar函数
+# 第二步：处理参数
+# 第三步：执行
 run() {
   # no jar? download it.
   [[ -f "$sbt_jar" ]] || acquire_sbt_jar "$sbt_version" || {

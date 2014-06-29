@@ -3,11 +3,15 @@
 # When creating new tests for Spark SQL Hive, the HADOOP_CLASSPATH must contain the hive jars so
 # that we can run Hive to generate the golden answer.  This is not required for normal development
 # or testing.
+# SBT脚本第一步：将hive安装目录下的lib里jar全部添加到HADOOP_CLASSPATH中，为了测试Hive集成TestCase的时候是使用
 for i in $HIVE_HOME/lib/*
 do HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$i
 done
 export HADOOP_CLASSPATH
 
+# SBT脚本第二步：执行sbt-launch-lib.bash脚本.
+# 在这一步里，先定义了一个shell函数realpath()用于返回一个从根径路开始的绝对路径
+# 注意：realpath函数里的$1是外面调用时候传入的$0
 realpath () {
 (
   TARGET_FILE=$1
@@ -30,7 +34,8 @@ realpath () {
 
 . $(dirname $(realpath $0))/sbt-launch-lib.bash
 
-
+# SBT脚本第三步：定义sbt的配置文件的常量，并在后面执行set加载
+# declare -r的意思是定义只读变量
 declare -r noshare_opts="-Dsbt.global.base=project/.sbtboot -Dsbt.boot.directory=project/.boot -Dsbt.ivy.home=project/.ivy"
 declare -r sbt_opts_file=".sbtopts"
 declare -r etc_sbt_opts_file="/etc/sbt/sbtopts"
@@ -99,12 +104,15 @@ process_my_args () {
   [[ "${sbt_version}XXX" != "XXX" ]] && addJava "-Dsbt.version=$sbt_version"
 }
 
+# 加载传入的文件并且去掉以#开头的行
 loadConfigFile() {
   cat "$1" | sed '/^\#/d'
 }
+
 
 # if sbtopts files exist, prepend their contents to $@ so it can be processed by this runner
 [[ -f "$etc_sbt_opts_file" ]] && set -- $(loadConfigFile "$etc_sbt_opts_file") "$@"
 [[ -f "$sbt_opts_file" ]] && set -- $(loadConfigFile "$sbt_opts_file") "$@"
 
+# SBT脚本第四步:执行在sbt-launch-lib中定义的run函数，并将参数传入
 run "$@"
