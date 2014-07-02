@@ -18,10 +18,11 @@
 #
 
 # Starts the master on the machine this script is executed on.
-
+# 第一步：将sbin变量赋值为sbin所在的实际目录
 sbin=`dirname "$0"`
 sbin=`cd "$sbin"; pwd`
 
+# 第二步：判断是否通过命令行参数指定使用tachyon，默认是不使用的
 START_TACHYON=false
 
 while (( "$#" )); do
@@ -37,8 +38,11 @@ case $1 in
 shift
 done
 
+# 第三步：执行spark-config，完成SPARK_HOME等环境变量赋值.
+# 注意：脚本是通过.来嵌入执行，是在同一个shell上下文里
 . "$sbin/spark-config.sh"
 
+# 第四步：执行load-spark-env脚本，这个脚本的作用是判断spark-env脚本的位置，默认先从SPARK_CONF_DIR变量定义的目录里寻找spark-env.sh并执行
 . "$SPARK_PREFIX/bin/load-spark-env.sh"
 
 if [ "$SPARK_MASTER_PORT" = "" ]; then

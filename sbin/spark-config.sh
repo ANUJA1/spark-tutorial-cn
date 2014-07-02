@@ -20,17 +20,21 @@
 # also should not be passed any arguments, since we need original $*
 
 # resolve links - $0 may be a softlink
+# 第一步取得当前脚本的绝对路径（含脚本名），赋值给this
+# ${BASH_SOURCE-$0}获取的是spark_config文件的路径名称，而$0则是嵌入脚本的名称
 this="${BASH_SOURCE-$0}"
 common_bin=$(cd -P -- "$(dirname -- "$this")" && pwd -P)
 script="$(basename -- "$this")"
 this="$common_bin/$script"
 
 # convert relative path to absolute path
+# Todo:这个相对路径转换还需要么？上面已经是绝对路径
 config_bin=`dirname "$this"`
 script=`basename "$this"`
 config_bin=`cd "$config_bin"; pwd`
 this="$config_bin/$script"
 
+# 第二步定义SPARK_HOME系列变量，同时将PySpark加入到PYTHONPATH环境变量中
 export SPARK_PREFIX=`dirname "$this"`/..
 export SPARK_HOME=${SPARK_PREFIX}
 export SPARK_CONF_DIR="$SPARK_HOME/conf"
