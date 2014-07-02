@@ -38,7 +38,7 @@ case $1 in
 shift
 done
 
-# 第三步：执行spark-config，完成SPARK_HOME等环境变量赋值.
+# 第三步：执行spark-config，完成SPARK_HOME、SPARK_CONF_DIR等环境变量赋值.
 # 注意：脚本是通过.来嵌入执行，是在同一个shell上下文里
 . "$sbin/spark-config.sh"
 

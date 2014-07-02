@@ -30,6 +30,7 @@ if [ -z "$SPARK_ENV_LOADED" ]; then
   parent_dir="$(cd `dirname $0`/..; pwd)"
 
   # 如果有SPARK_CONF_DIR定义且非null则取其值，否则用当前目录下conf目录，例如从start-master进来，则是sbin/conf目录
+  # 注意：SPARK_CONF_DIR是在spark-config.sh里定义的，而在执行完spark-config后，如果执行spark-daemon.sh，这个脚本接受通过--config参数设置其值，这一点可能会导致变量值前后不一致的情况（这里主要指一个脚本中前后执行中会写出不同的conf目录地址，例如start-master）,应该避免@TODO
   use_conf_dir=${SPARK_CONF_DIR:-"$parent_dir/conf"}
 
   if [ -f "${use_conf_dir}/spark-env.sh" ]; then
