@@ -42,8 +42,10 @@ import scala.collection.mutable.HashMap
  /**
   * SparkConf是一个设计用于存取配置信息的对象，默认的行为是从系统环境变量里读取"spark.”开头的变量，
   * 存入到内部一个HashMap中。
-  * Todo: SparkConf 与SparkContext的关系：复制与运行时不可修改
   * 
+  * 注意：在创建SparkContext对象时，需要传入SparkConf对象，在构造过程中conf对象会先被clone，然后调用conf的
+  * validateSettings方法进行验证，并且以后每次从SparkContext对象里取出conf对象都是取出的conf的副本，即执行
+  * 一次conf.clone. 所以当sparkContext创建好之后，配置是只读的，用户是无法修改配置信息的。
   * /
 class SparkConf(loadDefaults: Boolean) extends Cloneable with Logging {
 
