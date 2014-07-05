@@ -38,6 +38,13 @@ import scala.collection.mutable.HashMap
  *
  * @param loadDefaults whether to also load values from Java system properties
  */
+ 
+ /**
+  * SparkConf是一个设计用于存取配置信息的对象，默认的行为是从系统环境变量里读取"spark.”开头的变量，
+  * 存入到内部一个HashMap中。
+  * Todo: SparkConf 与SparkContext的关系：复制与运行时不可修改
+  * 
+  * /
 class SparkConf(loadDefaults: Boolean) extends Cloneable with Logging {
 
   /** Create a SparkConf that loads defaults from system properties and the classpath */
