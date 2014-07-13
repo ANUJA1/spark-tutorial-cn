@@ -19,6 +19,7 @@ declare -a residual_args
 declare -a java_args
 declare -a scalac_args
 declare -a sbt_commands
+declare -a maven_profiles
 
 # 设置java_cmd，方法为判断JAVA_HOME下的java如果存在则取这个路径为java_cmd,否则为java
 # test -x的意思是判断文件存在且可执行
@@ -93,6 +94,13 @@ addJava () {
   dlog "[addJava] arg = '$1'"
   java_args=( "${java_args[@]}" "$1" )
 }
+
+enableProfile () {
+  dlog "[enableProfile] arg = '$1'"
+  maven_profiles=( "${maven_profiles[@]}" "$1" )
+  export SBT_MAVEN_PROFILES="${maven_profiles[@]}"
+}
+
 addSbt () {
   dlog "[addSbt] arg = '$1'"
   sbt_commands=( "${sbt_commands[@]}" "$1" )
@@ -147,7 +155,8 @@ process_args () {
      -java-home) require_arg path "$1" "$2" && java_cmd="$2/bin/java" && export JAVA_HOME=$2 && shift 2 ;;
 
             -D*) addJava "$1" && shift ;;
-            -J*) addJava "${1:2}" && shift ;;
+            -J*) addJava "${1:2}" && shift ;; 
+            -P*) enableProfile "$1" && shift ;;
               *) addResidual "$1" && shift ;;
     esac
   done
