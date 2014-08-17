@@ -1,6 +1,13 @@
 # Apache Spark
 
-Lightning-Fast Cluster Computing - <http://spark.apache.org/>
+Spark is a fast and general cluster computing system for Big Data. It provides
+high-level APIs in Scala, Java, and Python, and an optimized engine that
+supports general computation graphs for data analysis. It also supports a
+rich set of higher-level tools including Spark SQL for SQL and structured
+data processing, MLLib for machine learning, GraphX for graph processing,
+and Spark Streaming.
+
+<http://spark.apache.org/>
 
 
 ## Online Documentation
@@ -106,6 +113,15 @@ If your project is built with Maven, add this to your POM file's `<dependencies>
       <artifactId>hadoop-client</artifactId>
       <version>1.2.1</version>
     </dependency>
+
+
+## A Note About Thrift JDBC server and CLI for Spark SQL
+
+Spark SQL supports Thrift JDBC server and CLI.
+See sql-programming-guide.md for more information about those features.
+You can use those features by setting `-Phive-thriftserver` when building Spark as follows.
+
+    $ sbt/sbt -Phive-thriftserver assembly
 
 
 ## Configuration
