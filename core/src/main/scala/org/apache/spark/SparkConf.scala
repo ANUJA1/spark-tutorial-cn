@@ -46,7 +46,7 @@ import scala.collection.mutable.HashMap
   * 注意：在创建SparkContext对象时，需要传入SparkConf对象，在构造过程中conf对象会先被clone，然后调用conf的
   * validateSettings方法进行验证，并且以后每次从SparkContext对象里取出conf对象都是取出的conf的副本，即执行
   * 一次conf.clone. 所以当sparkContext创建好之后，配置是只读的，用户是无法修改配置信息的。
-  * /
+  */
 class SparkConf(loadDefaults: Boolean) extends Cloneable with Logging {
 
   import SparkConf._
