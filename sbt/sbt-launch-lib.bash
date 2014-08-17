@@ -116,6 +116,7 @@ addDebugger () {
 # a ham-fisted attempt to move some memory settings in concert
 # so they need not be dicked around with individually.
 get_mem_opts () {
+  #为函数局部变量mem赋默认值，“:-”操作符代表即使函数调用时候没有传$1也可以给$1赋默认值
   local mem=${1:-2048}
   local perm=$(( $mem / 4 ))
   (( $perm > 256 )) || perm=256
@@ -129,6 +130,8 @@ require_arg () {
   local type="$1"
   local opt="$2"
   local arg="$3"
+
+  #-z是判断字符串长度是不是为0，对应-n是判断字符串是不是不为0
   if [[ -z "$arg" ]] || [[ "${arg:0:1}" == "-" ]]; then
     die "$opt requires <$type> argument"
   fi

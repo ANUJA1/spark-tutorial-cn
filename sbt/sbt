@@ -40,6 +40,9 @@ declare -r noshare_opts="-Dsbt.global.base=project/.sbtboot -Dsbt.boot.directory
 declare -r sbt_opts_file=".sbtopts"
 declare -r etc_sbt_opts_file="/etc/sbt/sbtopts"
 
+
+#usage函数主要作用是显示sbt脚本的参数使用方法
+# -mem 2048: 指定jvm内存大小Xmx2048 Xms2048 
 usage() {
  cat <<EOM
 Usage: $script_name [options]
